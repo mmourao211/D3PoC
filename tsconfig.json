@@ -12,6 +12,10 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "types":[
+      "d3",
+      "d3-zoom"
+    ],
     "lib": [
       "es2017",
       "dom"
