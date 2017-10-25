@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import * as cytoscape from 'cytoscape'
-
-
+import * as cytoscape from 'cytoscape';
+import dagre from 'cytoscape-dagre'
 
 @Component({
   selector: 'app-root',
@@ -39,7 +38,7 @@ export class AppComponent {
 
     }
     recu(1, initialName);
-
+    (cytoscape as any).use(dagre);
     var cy = cytoscape({
       container: document.getElementById('cy'),
       hideEdgesOnViewport: true,
@@ -53,12 +52,17 @@ export class AppComponent {
                     'background-color': 'red',
                     // label: 'data(id)'
                 }
-            }], layout:{
+            }]
+    });
+
+    var layout: any = cy.layout({
               name: 'random', 
               fit: false, 
               directed: true,
-              boundingBox:{x1: -10000,y1: -10000, x2: 10000,y2: 10000}} as any,
-    });
-
+              boundingBox:{x1: -10000,y1: -10000, x2: 10000,y2: 10000},
+              ready: () => console.log('ready'),
+              stop: () => console.log('stop')
+            } as any)
+    layout.on('layoutstart', () => console.log('layoutstart')).run();
   }
 }
