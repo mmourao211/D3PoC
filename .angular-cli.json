@@ -19,15 +19,12 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
-        "../node_modules/jointjs/dist/joint.css"
+        "styles.css"
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.js",
-        "../node_modules/lodash/lodash.js",
-        "../node_modules/dagre/dist/dagre.js",
-        "../node_modules/cytoscape/dist/cytoscape.js",
-        "../node_modules/cytoscape-dagre/cytoscape-dagre.js"
+        "../node_modules/sigma/build/sigma.min.js",
+        "../node_modules/sigma/plugins/sigma.plugins.animate/sigma.plugins.animate.js",
+        "../node_modules/sigma/plugins/sigma.layout.noverlap/sigma.layout.noverlap.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

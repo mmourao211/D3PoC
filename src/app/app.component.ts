@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import * as cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre'
+import * as sigma from 'sigma'
 
 @Component({
   selector: 'app-root',
@@ -14,55 +13,50 @@ export class AppComponent {
    *
    */
   constructor() {
-
-    var initialName:string = 'A'
-
-    var recu = (depth: number, name: string) => {
-      if(depth > 15) return;
-      this.elements.push({
-        data: {
-          id: name
-        }
-      })
-      var parentName = name.substr(0,name.length - 1);
-      if(parentName)
-        this.elements.push({
-          data:{
-            id: parentName + name,
-            source: parentName,
-            target: name
-          }
-        })
-        recu(depth + 1, name + "0");
-        recu(depth + 1, name + "1");
-
-    }
-    recu(1, initialName);
-    (cytoscape as any).use(dagre);
-    var cy = cytoscape({
-      container: document.getElementById('cy'),
-      hideEdgesOnViewport: true,
-      minZoom: 0.1,
-      elements: this.elements,
-        style: [
-            {
-                selector: 'node',
-                style: {
-                    shape: 'hexagon',
-                    'background-color': 'red',
-                    // label: 'data(id)'
-                }
-            }]
-    });
-
-    var layout: any = cy.layout({
-              name: 'random', 
-              fit: false, 
-              directed: true,
-              boundingBox:{x1: -10000,y1: -10000, x2: 10000,y2: 10000},
-              ready: () => console.log('ready'),
-              stop: () => console.log('stop')
-            } as any)
-    layout.on('layoutstart', () => console.log('layoutstart')).run();
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+        // Let's first initialize sigma:
+        var s = new sigma('cy');
+        
+            // Finally, let's ask our sigma instance to refresh:
+            
+            var initialName:string = 'A'
+            
+            var recu = (depth: number, name: string, parentX: number) => {
+              if(depth > 15) return;
+              var newX = name.length == 1 ? 0 : (name.endsWith('0')? (parentX - 100.0/Math.pow(2,depth)) :(parentX + 100.0/Math.pow(2,depth)) );
+              s.graph.addNode({
+                // Main attributes:
+                id: name,
+                label: name,
+                // Display attributes:
+                size: 1000.0/depth,
+                color: '#f00',
+                x: newX ,
+                y: depth
+              })
+              var parentName = name.substr(0,name.length - 1);
+              if(parentName)
+                s.graph.addEdge({
+                  id: parentName + name,
+                  // Reference extremities:
+                  source: parentName,
+                  target: name
+                });
+              recu(depth + 1, name + "0", newX);
+              recu(depth + 1, name + "1", newX);
+              
+            }
+            recu(1, initialName, 0);
+            s.settings({
+              // drawEdges: false,
+              // batchEdgesDrawing: true,
+              hideEdgesOnMove: true,
+              drawLabels: false,
+              minNodeSize: 0.001
+            })
+            s.camera.ratio = 0.01;
+            s.refresh();
   }
 }
