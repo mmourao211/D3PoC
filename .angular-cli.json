@@ -19,12 +19,11 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "../node_modules/vis/dist/vis.css"
       ],
       "scripts": [
-        "../node_modules/sigma/build/sigma.min.js",
-        "../node_modules/sigma/plugins/sigma.plugins.animate/sigma.plugins.animate.js",
-        "../node_modules/sigma/plugins/sigma.layout.noverlap/sigma.layout.noverlap.js"
+        "../node_modules/vis/dist/vis.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
